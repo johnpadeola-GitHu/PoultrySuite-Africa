@@ -1,0 +1,198 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ───── Centralized spacing system ───────────────────────── */
+/* Single source of truth for page padding & max-width.       */
+/* Components read these via the JS helpers in layout.js OR   */
+/* directly via var(--ps-gutter-x) in CSS rules.              */
+:root {
+  /* Horizontal page gutter — generous breathing space */
+  --ps-gutter-x: 24px;
+  /* Vertical page padding */
+  --ps-gutter-y: 24px;
+  /* Max content width on large screens (keeps lines readable) */
+  --ps-max-width: 1440px;
+  /* Standard inter-element gap */
+  --ps-gap: 16px;
+  /* Card / panel inner padding */
+  --ps-card-padding: 20px;
+}
+
+/* Tablet — more room */
+@media (min-width: 640px) {
+  :root {
+    --ps-gutter-x: 32px;
+    --ps-gutter-y: 28px;
+    --ps-card-padding: 24px;
+  }
+}
+
+/* Desktop — proper enterprise spacing */
+@media (min-width: 1024px) {
+  :root {
+    --ps-gutter-x: 48px;
+    --ps-gutter-y: 32px;
+    --ps-card-padding: 28px;
+  }
+}
+
+/* Wide desktop — most space */
+@media (min-width: 1440px) {
+  :root {
+    --ps-gutter-x: 64px;
+  }
+}
+
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #F9FAFB;
+  color: #1F2937;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+button {
+  font-family: inherit;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+/* ───── Reusable container/layout helpers ────────────────── */
+/* Apply .ps-container to any element to get responsive       */
+/* horizontal padding + centered max-width.                   */
+.ps-container {
+  width: 100%;
+  max-width: var(--ps-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--ps-gutter-x);
+  padding-right: var(--ps-gutter-x);
+}
+
+.ps-container-fluid {
+  width: 100%;
+  padding-left: var(--ps-gutter-x);
+  padding-right: var(--ps-gutter-x);
+}
+
+.ps-page {
+  padding-top: var(--ps-gutter-y);
+  padding-bottom: var(--ps-gutter-y);
+}
+
+.ps-stack > * + * {
+  margin-top: var(--ps-gap);
+}
+
+/* ───── Initial Loading Screen ───────────────────────────── */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 18px;
+  color: #6B7280;
+  background: #F9FAFB;
+}
+
+.loading-mark {
+  width: 56px;
+  height: 56px;
+  position: relative;
+  background:
+    radial-gradient(closest-side at 50% 60%, #F4C95D 0 60%, transparent 62%),
+    #1F2937;
+  border-radius: 12px;
+  animation: ps-pulse 1.4s ease-in-out infinite;
+}
+
+.loading-mark::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 14px;
+  border: 2px solid rgba(31, 41, 55, 0.18);
+  border-top-color: #1F2937;
+  animation: ps-spin 1s linear infinite;
+}
+
+.loading-text {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+@keyframes ps-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+@keyframes ps-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ───── Skeleton Loader Shimmer ──────────────────────────── */
+.ps-skel {
+  position: relative;
+  overflow: hidden;
+  background: #EEF0EE;
+  border-radius: 0;
+}
+.ps-skel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+  animation: ps-shimmer 1.4s infinite;
+}
+
+@keyframes ps-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ───── Offline Banner ───────────────────────────────────── */
+.ps-offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9500;
+  background: #92400E;
+  color: #FEF3C7;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.ps-offline-banner-dot {
+  width: 8px;
+  height: 8px;
+  background: #F59E0B;
+  border-radius: 50%;
+  animation: ps-pulse 1.4s ease-in-out infinite;
+}
